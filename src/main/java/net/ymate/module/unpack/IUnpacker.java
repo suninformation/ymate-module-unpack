@@ -16,12 +16,14 @@
 package net.ymate.module.unpack;
 
 import net.ymate.platform.core.IApplication;
+import net.ymate.platform.core.beans.annotation.Ignored;
 import net.ymate.platform.core.support.IDestroyable;
 import net.ymate.platform.core.support.IInitialization;
 
 /**
  * @author 刘镇 (suninformation@163.com) on 2017/08/02 下午 22:27
  */
+@Ignored
 public interface IUnpacker extends IInitialization<IApplication>, IDestroyable {
 
     String MODULE_NAME = "module.unpack";

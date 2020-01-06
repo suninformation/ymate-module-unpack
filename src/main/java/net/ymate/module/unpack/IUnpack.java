@@ -15,10 +15,13 @@
  */
 package net.ymate.module.unpack;
 
+import net.ymate.platform.core.beans.annotation.Ignored;
+
 /**
  * 资源提取接口, 提取模块Jar包中META-INF目录下以模块名称命名资源
  *
  * @author 刘镇 (suninformation@163.com) on 16/9/30 下午3:24
  */
+@Ignored
 public interface IUnpack {
 }
