@@ -26,7 +26,6 @@ import net.ymate.platform.core.beans.IBeanLoadFactory;
 import net.ymate.platform.core.beans.IBeanLoader;
 import net.ymate.platform.core.module.IModule;
 import net.ymate.platform.core.module.IModuleConfigurer;
-import net.ymate.platform.core.module.annotation.Module;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -40,7 +39,6 @@ import java.util.Map;
 /**
  * @author 刘镇 (suninformation@163.com) on 2017/08/02 下午 22:27
  */
-@Module
 public class Unpacker implements IModule, IUnpacker {
 
     private static final Log LOG = LogFactory.getLog(Unpacker.class);
