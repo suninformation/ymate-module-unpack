@@ -11,7 +11,7 @@
 
     <name>ymate-module-unpack</name>
     <url>https://www.ymate.net/</url>
-    <description>YMP Unpack Module Archetype</description>
+    <description>YMP Unpack Module.</description>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -104,7 +104,6 @@
                 <excludes>
                     <exclude>**/ymp-*.properties</exclude>
                 </excludes>
-                <filtering>false</filtering>
             </resource>
         </resources>
         <pluginManagement>
