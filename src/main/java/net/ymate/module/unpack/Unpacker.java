@@ -20,10 +20,12 @@ import net.ymate.module.unpack.handle.UnpackHandler;
 import net.ymate.module.unpack.impl.DefaultUnpackConfig;
 import net.ymate.platform.commons.util.FileUtils;
 import net.ymate.platform.commons.util.RuntimeUtils;
+import net.ymate.platform.core.ApplicationEvent;
 import net.ymate.platform.core.IApplication;
 import net.ymate.platform.core.YMP;
 import net.ymate.platform.core.beans.IBeanLoadFactory;
 import net.ymate.platform.core.beans.IBeanLoader;
+import net.ymate.platform.core.event.IEventListener;
 import net.ymate.platform.core.module.IModule;
 import net.ymate.platform.core.module.IModuleConfigurer;
 import org.apache.commons.lang3.StringUtils;
@@ -93,6 +95,12 @@ public class Unpacker implements IModule, IUnpacker {
                         beanLoader.registerHandler(Unpack.class, new UnpackHandler(this));
                     }
                 }
+                owner.getEvents().registerListener(ApplicationEvent.class, (IEventListener<ApplicationEvent>) context -> {
+                    if (ApplicationEvent.EVENT.APPLICATION_INITIALIZED.equals(context.getEventName())) {
+                        unpack();
+                    }
+                    return false;
+                });
             }
             initialized = true;
         }

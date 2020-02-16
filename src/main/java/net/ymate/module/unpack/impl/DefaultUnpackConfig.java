@@ -15,8 +15,8 @@
  */
 package net.ymate.module.unpack.impl;
 
-import net.ymate.module.unpack.IUnpacker;
 import net.ymate.module.unpack.IUnpackConfig;
+import net.ymate.module.unpack.IUnpacker;
 import net.ymate.platform.core.configuration.IConfigReader;
 import net.ymate.platform.core.module.IModuleConfigurer;
 
