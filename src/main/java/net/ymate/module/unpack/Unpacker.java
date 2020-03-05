@@ -88,7 +88,7 @@ public class Unpacker implements IModule, IUnpacker {
                 config.initialize(this);
             }
             if (config.isEnabled()) {
-                IBeanLoadFactory beanLoaderFactory = YMP.getBeanLoadFactory();
+                IBeanLoadFactory beanLoaderFactory = owner.getConfigurer().getBeanLoadFactory();
                 if (beanLoaderFactory != null) {
                     IBeanLoader beanLoader = beanLoaderFactory.getBeanLoader();
                     if (beanLoader != null) {
