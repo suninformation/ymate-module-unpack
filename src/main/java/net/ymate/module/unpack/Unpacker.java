@@ -22,6 +22,7 @@ import net.ymate.platform.commons.util.FileUtils;
 import net.ymate.platform.commons.util.RuntimeUtils;
 import net.ymate.platform.core.ApplicationEvent;
 import net.ymate.platform.core.IApplication;
+import net.ymate.platform.core.IApplicationConfigurer;
 import net.ymate.platform.core.YMP;
 import net.ymate.platform.core.beans.IBeanLoadFactory;
 import net.ymate.platform.core.beans.IBeanLoader;
@@ -80,15 +81,16 @@ public class Unpacker implements IModule, IUnpacker {
             YMP.showModuleVersion("ymate-module-unpack", this);
             //
             this.owner = owner;
+            IApplicationConfigurer configurer = owner.getConfigureFactory().getConfigurer();
             if (config == null) {
-                IModuleConfigurer moduleConfigurer = owner.getConfigurer().getModuleConfigurer(MODULE_NAME);
+                IModuleConfigurer moduleConfigurer = configurer.getModuleConfigurer(MODULE_NAME);
                 config = moduleConfigurer == null ? DefaultUnpackConfig.defaultConfig() : DefaultUnpackConfig.create(moduleConfigurer);
             }
             if (!config.isInitialized()) {
                 config.initialize(this);
             }
             if (config.isEnabled()) {
-                IBeanLoadFactory beanLoaderFactory = owner.getConfigurer().getBeanLoadFactory();
+                IBeanLoadFactory beanLoaderFactory = configurer.getBeanLoadFactory();
                 if (beanLoaderFactory != null) {
                     IBeanLoader beanLoader = beanLoaderFactory.getBeanLoader();
                     if (beanLoader != null) {
