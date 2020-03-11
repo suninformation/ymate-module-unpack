@@ -17,10 +17,15 @@ package net.ymate.module.unpack.impl;
 
 import net.ymate.module.unpack.IUnpackConfig;
 import net.ymate.module.unpack.IUnpacker;
+import net.ymate.module.unpack.annotation.UnpackConf;
 import net.ymate.platform.core.configuration.IConfigReader;
 import net.ymate.platform.core.module.IModuleConfigurer;
+import org.apache.commons.lang3.ArrayUtils;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author 刘镇 (suninformation@163.com) on 2017/08/02 下午 22:27
@@ -38,7 +43,11 @@ public class DefaultUnpackConfig implements IUnpackConfig {
     }
 
     public static IUnpackConfig create(IModuleConfigurer moduleConfigurer) {
-        return new DefaultUnpackConfig(moduleConfigurer);
+        return new DefaultUnpackConfig(null, moduleConfigurer);
+    }
+
+    public static IUnpackConfig create(Class<?> mainClass, IModuleConfigurer moduleConfigurer) {
+        return new DefaultUnpackConfig(mainClass, moduleConfigurer);
     }
 
     public static Builder builder() {
@@ -48,14 +57,16 @@ public class DefaultUnpackConfig implements IUnpackConfig {
     private DefaultUnpackConfig() {
     }
 
-    private DefaultUnpackConfig(IModuleConfigurer moduleConfigurer) {
+    private DefaultUnpackConfig(Class<?> mainClass, IModuleConfigurer moduleConfigurer) {
         IConfigReader configReader = moduleConfigurer.getConfigReader();
         //
-        enabled = configReader.getBoolean(ENABLED, true);
+        UnpackConf confAnn = mainClass == null ? null : mainClass.getAnnotation(UnpackConf.class);
         //
-        List<String> disabledUnpackList = configReader.getList(DISABLED_UNPACK_LIST);
-        if (!disabledUnpackList.isEmpty()) {
-            disabledUnpacks.addAll(disabledUnpackList);
+        enabled = configReader.getBoolean(ENABLED, confAnn == null || confAnn.enabled());
+        //
+        String[] disabledUnpackList = configReader.getArray(DISABLED_UNPACK_LIST, confAnn != null ? confAnn.disabledUnpacks() : null);
+        if (ArrayUtils.isNotEmpty(disabledUnpackList)) {
+            disabledUnpacks.addAll(Arrays.asList(disabledUnpackList));
         }
     }
 

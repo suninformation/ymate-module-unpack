@@ -20,15 +20,13 @@ import net.ymate.module.unpack.handle.UnpackHandler;
 import net.ymate.module.unpack.impl.DefaultUnpackConfig;
 import net.ymate.platform.commons.util.FileUtils;
 import net.ymate.platform.commons.util.RuntimeUtils;
-import net.ymate.platform.core.ApplicationEvent;
-import net.ymate.platform.core.IApplication;
-import net.ymate.platform.core.IApplicationConfigurer;
-import net.ymate.platform.core.YMP;
+import net.ymate.platform.core.*;
 import net.ymate.platform.core.beans.IBeanLoadFactory;
 import net.ymate.platform.core.beans.IBeanLoader;
 import net.ymate.platform.core.event.IEventListener;
 import net.ymate.platform.core.module.IModule;
 import net.ymate.platform.core.module.IModuleConfigurer;
+import net.ymate.platform.core.module.impl.DefaultModuleConfigurer;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -69,6 +67,13 @@ public class Unpacker implements IModule, IUnpacker {
         return inst;
     }
 
+    public Unpacker() {
+    }
+
+    public Unpacker(IUnpackConfig config) {
+        this.config = config;
+    }
+
     @Override
     public String getName() {
         return IUnpacker.MODULE_NAME;
@@ -81,20 +86,33 @@ public class Unpacker implements IModule, IUnpacker {
             YMP.showModuleVersion("ymate-module-unpack", this);
             //
             this.owner = owner;
-            IApplicationConfigurer configurer = owner.getConfigureFactory().getConfigurer();
+            IApplicationConfigureFactory configureFactory = owner.getConfigureFactory();
+            IApplicationConfigurer configurer = null;
+            if (configureFactory != null) {
+                configurer = configureFactory.getConfigurer();
+                if (config == null) {
+                    IModuleConfigurer moduleConfigurer = configurer == null ? null : configurer.getModuleConfigurer(MODULE_NAME);
+                    if (moduleConfigurer != null) {
+                        config = DefaultUnpackConfig.create(configureFactory.getMainClass(), moduleConfigurer);
+                    } else {
+                        config = DefaultUnpackConfig.create(configureFactory.getMainClass(), DefaultModuleConfigurer.createEmpty(MODULE_NAME));
+                    }
+                }
+            }
             if (config == null) {
-                IModuleConfigurer moduleConfigurer = configurer.getModuleConfigurer(MODULE_NAME);
-                config = moduleConfigurer == null ? DefaultUnpackConfig.defaultConfig() : DefaultUnpackConfig.create(moduleConfigurer);
+                config = DefaultUnpackConfig.defaultConfig();
             }
             if (!config.isInitialized()) {
                 config.initialize(this);
             }
             if (config.isEnabled()) {
-                IBeanLoadFactory beanLoaderFactory = configurer.getBeanLoadFactory();
-                if (beanLoaderFactory != null) {
-                    IBeanLoader beanLoader = beanLoaderFactory.getBeanLoader();
-                    if (beanLoader != null) {
-                        beanLoader.registerHandler(Unpack.class, new UnpackHandler(this));
+                if (configurer != null) {
+                    IBeanLoadFactory beanLoaderFactory = configurer.getBeanLoadFactory();
+                    if (beanLoaderFactory != null) {
+                        IBeanLoader beanLoader = beanLoaderFactory.getBeanLoader();
+                        if (beanLoader != null) {
+                            beanLoader.registerHandler(Unpack.class, new UnpackHandler(this));
+                        }
                     }
                 }
                 owner.getEvents().registerListener(ApplicationEvent.class, (IEventListener<ApplicationEvent>) context -> {
