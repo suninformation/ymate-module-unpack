@@ -83,7 +83,7 @@ public class Unpacker implements IModule, IUnpacker {
     public void initialize(IApplication owner) throws Exception {
         if (!initialized) {
             //
-            YMP.showVersion("Initializing ymate-module-unpack-${version}", new Version(1, 0, 0, Version.VersionType.Alpha));
+            YMP.showVersion("Initializing ymate-module-unpack-${version}", new Version(1, 0, 0, Unpacker.class, Version.VersionType.Alpha));
             //
             this.owner = owner;
             IApplicationConfigureFactory configureFactory = owner.getConfigureFactory();
