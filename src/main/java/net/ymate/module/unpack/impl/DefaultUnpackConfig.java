@@ -34,7 +34,7 @@ public class DefaultUnpackConfig implements IUnpackConfig {
 
     private boolean enabled = true;
 
-    private Set<String> disabledUnpacks = new HashSet<>();
+    private final Set<String> disabledUnpacks = new HashSet<>();
 
     private boolean initialized;
 

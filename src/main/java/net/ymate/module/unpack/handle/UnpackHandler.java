@@ -25,7 +25,7 @@ import net.ymate.platform.core.beans.IBeanHandler;
  */
 public class UnpackHandler implements IBeanHandler {
 
-    private IUnpacker owner;
+    private final IUnpacker owner;
 
     public UnpackHandler(IUnpacker owner) {
         this.owner = owner;

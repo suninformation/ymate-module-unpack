@@ -181,18 +181,22 @@ public class Unpacker implements IModule, IUnpacker {
                 if (!locker.exists()) {
                     try {
                         flag = true;
-                        LOG.info(String.format("Unpacking %s...", entry.getValue()));
+                        if (LOG.isInfoEnabled()) {
+                            LOG.info(String.format("Unpacking %s...", entry.getValue()));
+                        }
                         if (FileUtils.unpackJarFile(entry.getKey(), targetPath, entry.getValue())) {
                             locker.getParentFile().mkdirs();
                             locker.createNewFile();
                         }
                     } catch (IOException e) {
-                        LOG.warn(String.format("Synchronizing resource [%s] exception", entry.getKey()), RuntimeUtils.unwrapThrow(e));
+                        if (LOG.isWarnEnabled()) {
+                            LOG.warn(String.format("Synchronizing resource [%s] exception", entry.getKey()), RuntimeUtils.unwrapThrow(e));
+                        }
                     }
                 }
             }
         }
-        if (flag) {
+        if (flag && LOG.isInfoEnabled()) {
             LOG.info("Synchronizing resource completed.");
         }
     }
