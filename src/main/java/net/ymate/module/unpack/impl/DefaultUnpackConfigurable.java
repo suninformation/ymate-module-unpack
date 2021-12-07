@@ -19,6 +19,9 @@ import net.ymate.module.unpack.IUnpackConfig;
 import net.ymate.module.unpack.IUnpacker;
 import net.ymate.platform.core.module.IModuleConfigurer;
 import net.ymate.platform.core.module.impl.DefaultModuleConfigurable;
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.Collection;
 
 /**
  * @author 刘镇 (suninformation@163.com) on 2020/02/16 16:03
@@ -45,8 +48,8 @@ public class DefaultUnpackConfigurable extends DefaultModuleConfigurable {
             return this;
         }
 
-        public Builder disabledUnpackList(String disabledUnpackList) {
-            configurable.addConfig(IUnpackConfig.DISABLED_UNPACK_LIST, disabledUnpackList);
+        public Builder disabledUnpackList(Collection<String> disabledUnpackList) {
+            configurable.addConfig(IUnpackConfig.DISABLED_UNPACK_LIST, StringUtils.join(disabledUnpackList, "|"));
             return this;
         }
 
